@@ -1,0 +1,30 @@
+---
+- name: Instalação do Google Chrome e Selenium via Ansible
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Atualiza os pacotes do sistema
+      apt:
+        update_cache: yes
+        upgrade: dist
+        cache_valid_time: 3600
+
+    - name: Baixa o pacote do Google Chrome
+      get_url: 
+        url: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        dest: /tmp/google-chrome.deb
+
+    - name: Instala o Google Chrome
+      apt:
+        deb: /tmp/google-chrome.deb
+
+    - name: Instala selenium
+      ansible.builtin.pip:
+        name: selenium
+        extra_args: --break-system-packages
+
+
+    - name: Instala webdriver-manager
+      ansible.builtin.pip:
+        name: webdriver-manager
